@@ -1,22 +1,30 @@
-## AWS SAM Application for Managing Study Data Lake
-
-This is a sample application to demonstrate how to build an application on AWS Serverless Envinronment using the
-AWS SAM, Amazon API Gateway, AWS Lambda and Amazon DynamoDB.
-It also uses the DynamoDBMapper ORM structure to map Study items in a DynamoDB table to a RESTful API for managing Studies.
+<h1 align="center">AWS SAM - Serverless Architecture </h1>
 
 
-## Requirements
+<p align="center">
+   <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+   <a href="#-requisitos">Requisitos </a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+   <a href="#-executar">Como executar ?</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </p>
+ 
+ 
+## 💻 Projeto 
 
-* AWS CLI already configured with at least PowerUser permission
-* [Java SE Development Kit 8 installed](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* [Docker installed](https://www.docker.com/community-edition)
+Essa é uma aplicação construída utilizando o ambiente serverless da AWS usando AWS SAM, Amazon API Gateway, AWS Lambda and Amazon DynamoDB.
+Também utiliza a estrutura ORM do DynamoDBMapper para mapear os items TRIP em uma tabela DynamoDB para uma API RESTfull.
+
+## :rocket: Requisitos
+
+* AWS CLI, já configurada e com a permissão de PowerUser
+* [Java 8 SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* [Docker](https://www.docker.com/community-edition)
 * [Maven](https://maven.apache.org/install.html)
 * [SAM CLI](https://github.com/awslabs/aws-sam-cli)
 * [Python 3](https://docs.python.org/3/)
 
-## Setup process
+## ⚙️ Como executar ?
 
-### Installing dependencies
+### Instalar dependências
 
 We use `maven` to install our dependencies and package our application into a JAR file:
 
@@ -89,28 +97,6 @@ After deployment is complete you can run the following command to retrieve the A
 aws cloudformation describe-stacks \
     --stack-name sam-orderHandler \
     --query 'Stacks[].Outputs'
-```
-
-# Appendix
-
-## AWS CLI commands
-
-AWS CLI commands to package, deploy and describe outputs defined within the cloudformation stack:
-
-```bash
-sam package \
-    --template-file template.yaml \
-    --output-template-file packaged.yaml \
-    --s3-bucket REPLACE_THIS_WITH_YOUR_S3_BUCKET_NAME
-
-sam deploy \
-    --template-file packaged.yaml \
-    --stack-name sam-orderHandler \
-    --capabilities CAPABILITY_IAM \
-    --parameter-overrides MyParameterSample=MySampleValue
-
-aws cloudformation describe-stacks \
-    --stack-name sam-orderHandler --query 'Stacks[].Outputs'
 ```
 
 
