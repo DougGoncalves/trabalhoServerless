@@ -32,70 +32,25 @@ We use `maven` to install our dependencies and package our application into a JA
 mvn install
 ```
 
-### Local development
+### Rodando localmente
 
-**Invoking function locally through local API Gateway**
-1. Start DynamoDB Local in a Docker container. `docker run -p 8000:8000 -v $(pwd)/local/dynamodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data`
-2. Create the DynamoDB table. `aws dynamodb create-table --table-name trip --attribute-definitions AttributeName=topic,AttributeType=S AttributeName=dateTimeCreation,AttributeType=S AttributeName=tag,AttributeType=S AttributeName=consumed,AttributeType=S --key-schema AttributeName=topic,KeyType=HASH AttributeName=dateTimeCreation,KeyType=RANGE --local-secondary-indexes 'IndexName=tagIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=tag,KeyType=RANGE}],Projection={ProjectionType=ALL}' 'IndexName=consumedIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=consumed,KeyType=RANGE}],Projection={ProjectionType=ALL}' --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000`
 
-If the table already exist, you can delete: `aws dynamodb delete-table --table-name trip --endpoint-url http://localhost:8000`
+1. Rode o DynamoDB localmente em um container Docker. `docker run -p 8000:8000 -v $(pwd)/local/dynamodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data`
+2. Crie a table do DynamoDB. `aws dynamodb create-table --table-name trip --attribute-definitions AttributeName=topic,AttributeType=S AttributeName=dateTimeCreation,AttributeType=S AttributeName=tag,AttributeType=S AttributeName=consumed,AttributeType=S --key-schema AttributeName=topic,KeyType=HASH AttributeName=dateTimeCreation,KeyType=RANGE --local-secondary-indexes 'IndexName=tagIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=tag,KeyType=RANGE}],Projection={ProjectionType=ALL}' 'IndexName=consumedIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=consumed,KeyType=RANGE}],Projection={ProjectionType=ALL}' --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000`
 
-3. Start the SAM local API.
- - On a Mac: `sam local start-api --env-vars src/test/resources/test_environment_mac.json`
- - On Windows: `sam local start-api --env-vars src/test/resources/test_environment_windows.json`
- - On Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json`
+Caso a table já exista, você pode deletá-la: `aws dynamodb delete-table --table-name trip --endpoint-url http://localhost:8000`
+
+3. Inicie a API local do SAM.
+ - 🍎 Mac: `sam local start-api --env-vars src/test/resources/test_environment_mac.json`
+ - 🪟 Windows: `sam local start-api --env-vars src/test/resources/test_environment_windows.json`
+ - 🐧 Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json`
  
- OBS:  If you already have the container locally (in your case the java8), then you can use --skip-pull-image to remove the download
-
-If the previous command ran successfully you should now be able to hit the following local endpoint to
-invoke the functions rooted at `http://localhost:3000/study/{topic}?starts=2020-01-02&ends=2020-02-02`.
-It shoud return 404. Now you can explore all endpoints, use the src/test/resources/Study DataLake.postman_collection.json to import a API Rest Collection into Postman.
+ OBS:  Se você já possui o container localmente em sua máquina, você pode pular o processo de download pelo comando  --skip-pull-image 
+ 
+ Se o comando anterior rodou, você agora consegue acessar o endpoint localmente. 
 
 **SAM CLI** is used to emulate both Lambda and API Gateway locally and uses our `template.yaml` to
-understand how to bootstrap this environment (runtime, where the source code is, etc.) - The
-following excerpt is what the CLI will read in order to initialize an API and its routes:
-
-
-## Packaging and deployment
-
-AWS Lambda Java runtime accepts either a zip file or a standalone JAR file - We use the latter in
-this example. SAM will use `CodeUri` property to know where to look up for both application and
-dependencies:
-
-Firstly, we need a `S3 bucket` where we can upload our Lambda functions packaged as ZIP before we
-deploy anything - If you don't have a S3 bucket to store code artifacts then this is a good time to
-create one:
-
-```bash
-export BUCKET_NAME=my_cool_new_bucket
-aws s3 mb s3://$BUCKET_NAME
-```
-
-Next, run the following command to package our Lambda function to S3:
-
-```bash
-sam package \
-    --template-file template.yaml \
-    --output-template-file packaged.yaml \
-    --s3-bucket $BUCKET_NAME
-```
-
-Next, the following command will create a Cloudformation Stack and deploy your SAM resources.
-
-```bash
-sam deploy \
-    --template-file packaged.yaml \
-    --stack-name study-datalake \
-    --capabilities CAPABILITY_IAM
-```
-
-After deployment is complete you can run the following command to retrieve the API Gateway Endpoint URL:
-
-```bash
-aws cloudformation describe-stacks \
-    --stack-name sam-orderHandler \
-    --query 'Stacks[].Outputs'
-```
+understand how to bootstrap this environment (runtime, where the source code is, etc.) 
 ---
 <h4 align="center">
    Code and coffee ☕
