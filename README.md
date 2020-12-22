@@ -98,5 +98,8 @@ aws cloudformation describe-stacks \
     --stack-name sam-orderHandler \
     --query 'Stacks[].Outputs'
 ```
-
+---
+<h4 align="center">
+   Code and coffee ☕
+</h4>
 
