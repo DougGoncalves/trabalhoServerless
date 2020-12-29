@@ -49,8 +49,7 @@ Caso a table já exista, você pode deletá-la: `aws dynamodb delete-table --tab
  
  Se o comando anterior rodou, você agora consegue acessar o endpoint localmente. 
 
-**SAM CLI** is used to emulate both Lambda and API Gateway locally and uses our `template.yaml` to
-understand how to bootstrap this environment (runtime, where the source code is, etc.) 
+
 ---
 <h4 align="center">
    Code and coffee ☕
