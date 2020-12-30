@@ -26,7 +26,7 @@ Também utiliza a estrutura ORM do DynamoDBMapper para mapear os items TRIP em u
 
 ### Instalar dependências
 
-Nós utilizamos o MAVEN para gerenciar de dependências e para criação do JAR:
+Nós utilizamos o MAVEN para gerenciar as dependências e para criação do JAR:
 
 ```bash
 mvn install
